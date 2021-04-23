@@ -108,22 +108,20 @@ ________________________________________________________________________________
     
     4.) Run this command: winetricks corefonts vcrun2017 msxml4 (minimum requirement for running Fusion 360)
 
-    5.) Run this command: winecfg 
-    6.) Set the windows version to Windows 8 or 10 (only when you use the wine version 6.6 -> At the moment)
+    5.) Run this command: winetricks win10 (only when you use the wine version 6.6 -> At the moment)
+        Run this command: winetricks win8  (for older wine versions)
 
-    7.) Close this window
+    6.) Run this command: clear (It's better to see, what happens, when we clear the terminal.)
 
-    8.) Run this command: clear (It's better to see, what happens, when we clear the terminal.)
+    7.) Run this command: cd Downloads && mkdir fusion360 && cd fusion360
 
-    9.) Run this command: cd Downloads && mkdir fusion360 && cd fusion360
+    8.) Run this command: wget https://dl.appstreaming.autodesk.com/production/installers/Fusion%20360%20Admin%20Install.exe (Here we downloading the installer of Fusion 360.)
 
-    10.) Run this command: wget https://dl.appstreaming.autodesk.com/production/installers/Fusion%20360%20Admin%20Install.exe (Here we downloading the installer of Fusion 360.)
+    9.) Run this command: 7z x -osetup/ "Fusion 360 Admin Install.exe" && curl -Lo setup/platform.py github.com/python/cpython/raw/3.5/Lib/platform.py && sed -i 's/winver._platform_version or //' setup/platform.py
 
-    11.) Run this command: 7z x -osetup/ "Fusion 360 Admin Install.exe" && curl -Lo setup/platform.py github.com/python/cpython/raw/3.5/Lib/platform.py && sed -i 's/winver._platform_version or //' setup/platform.py
+    10.) Run this command: wine setup/streamer.exe -p deploy -g -f log.txt --quiet (Run this command 2x)
 
-    12.) Run this command: wine setup/streamer.exe -p deploy -g -f log.txt --quiet (Run this command 2x)
-
-    13.) Run this command (configures opengl in fusion, we must do before it can launch):
+    11.) Run this command (configures opengl in fusion, we must do before it can launch):
 
     mkdir -p "$WINEPREFIX/drive_c/users/$USER/Application Data/Autodesk/Neutron Platform/Options"
     cat > "$WINEPREFIX/drive_c/users/$USER/Application Data/Autodesk/Neutron Platform/Options/NMachineSpecificOptions.xml" << "E"
@@ -134,11 +132,11 @@ ________________________________________________________________________________
     </OptionGroups>
     E
 
-    14.) Run this command: env WINEPREFIX="/home/YOUR_USER_NAME/.wine" wine C:\\windows\\command\\start.exe /Unix /home/YOUR_USER_NAME/.wine/dosdevices/c:/ProgramData/Microsoft/Windows/Start\ Menu/Programs/Autodesk/Autodesk\ Fusion\ 360.lnk (Here we opening the program Fusion 360 and this creating some files in our .Fusion360 folder.)
+    12.) Run this command: env WINEPREFIX="/home/YOUR_USER_NAME/.wine" wine C:\\windows\\command\\start.exe /Unix /home/YOUR_USER_NAME/.wine/dosdevices/c:/ProgramData/Microsoft/Windows/Start\ Menu/Programs/Autodesk/Autodesk\ Fusion\ 360.lnk (Here we opening the program Fusion 360 and this creating some files in our .Fusion360 folder.)
 
-    15.) Login with your account data
+    13.) Login with your account data
 
-    16.) Now everything should work so far. Except floating Toolbars stays on top.
+    14.) Now everything should work so far. Except floating Toolbars stays on top.
 
     For that:
     ctrl+alt+b x2 (toggle browser toolbars off/on)
