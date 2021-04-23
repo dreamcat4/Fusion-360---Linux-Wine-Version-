@@ -100,47 +100,65 @@ ________________________________________________________________________________
 
 ![Ubuntu](https://user-images.githubusercontent.com/79079633/115113193-6ba14880-9f89-11eb-8d88-b927a80939cd.png)
 
-    1.) Check if your system is up to date: Open a Termial -> Run this command: sudo apt-get update && sudo apt-get upgrade (And it's important that have installed the newest graphics driver!)
+1.) Check if your system is up to date: Open a Termial -> Run this command: sudo apt-get update && sudo apt-get upgrade (And it's important that have installed the newest graphics driver!)
     
-    2.) Then run this command (install wine): sudo dpkg --add-architecture i386  && wget -nc https://dl.winehq.org/wine-builds/winehq.key && sudo apt-key add winehq.key && sudo add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ focal main' && sudo apt-get update && sudo apt install --install-recommends winehq-staging && sudo apt install winetricks
-    
-    3.) Run this command: sudo apt-get install p7zip p7zip-full p7zip-rar && sudo apt-get install curl && sudo apt-get install winbind
-    
-    4.) Run this command: winetricks -q corefonts vcrun2017 msxml4 (minimum requirement for running Fusion 360)
+2.) Then run these commands in a linux terminal. Be sure to change the 1st lines at the top `export WINEPREFIX=` for changing where to install fusion 360.
 
-    5.) Run this command: winetricks win10 (only when you use the wine version 6.6 -> At the moment)
-        Run this command: winetricks win8  (for older wine versions)
+```sh
+# create a new wineprefix, especially just for fusion only
+mkdir -p fusion360 && cd fusion360
+export WINEPREFIX=$PWD
 
-    6.) Run this command: clear (It's better to see, what happens, when we clear the terminal.)
+# install wine
+sudo dpkg --add-architecture i386  && wget -nc https://dl.winehq.org/wine-builds/winehq.key && sudo apt-key add winehq.key && sudo add-apt-repository -y 'deb https://dl.winehq.org/wine-builds/ubuntu/ focal main' && sudo apt install -y --install-recommends winehq-staging && sudo apt install -y winetricks
 
-    7.) Run this command: cd Downloads && mkdir fusion360 && cd fusion360
+# install other dependancies
+sudo apt install -y p7zip p7zip-full p7zip-rar curl winbind
 
-    8.) Run this command: wget https://dl.appstreaming.autodesk.com/production/installers/Fusion%20360%20Admin%20Install.exe (Here we downloading the installer of Fusion 360.)
+# install minimum requirements for running Fusion 360
+winetricks -q corefonts vcrun2017 msxml4
 
-    9.) Run this command: 7z x -osetup/ "Fusion 360 Admin Install.exe" && curl -Lo setup/platform.py github.com/python/cpython/raw/3.5/Lib/platform.py && sed -i 's/winver._platform_version or //' setup/platform.py
+# configure windows compatibilty mode
+winetricks win10 # only when you use the wine version 6.6 -> At the moment
+# winetricks win8 # for older wine versions
 
-    10.) Run this command: wine setup/streamer.exe -p deploy -g -f log.txt --quiet (Run this command 2x)
+# Here we downloading the installer of Fusion 360
+wget https://dl.appstreaming.autodesk.com/production/installers/Fusion%20360%20Admin%20Install.exe
 
-    11.) Run this command (configures opengl in fusion, we must do before it can launch):
+# fix the installer
+7z x -osetup/ "Fusion 360 Admin Install.exe" && curl -Lo setup/platform.py github.com/python/cpython/raw/3.5/Lib/platform.py && sed -i 's/winver._platform_version or //' setup/platform.py
 
-    mkdir -p "$WINEPREFIX/drive_c/users/$USER/Application Data/Autodesk/Neutron Platform/Options"
-    cat > "$WINEPREFIX/drive_c/users/$USER/Application Data/Autodesk/Neutron Platform/Options/NMachineSpecificOptions.xml" << "E"
-    <?xml version="1.0" encoding="UTF-16" standalone="no" ?>
-    <OptionGroups>
-      <BootstrapOptionsGroup SchemaVersion="2" ToolTip="Special preferences that require the application to be restarted after a change." UserName="Bootstrap">
-        <driverOptionId ToolTip="The driver used to display the graphics" UserName="Graphics driver" Value="VirtualDeviceGLCore"/></BootstrapOptionsGroup>
-    </OptionGroups>
-    E
+# Run this command 2x, installs fusion 360
+wine setup/streamer.exe -p deploy -g -f log.txt --quiet
+wine setup/streamer.exe -p deploy -g -f log.txt --quiet
 
-    12.) Run this command: env WINEPREFIX="/home/YOUR_USER_NAME/.wine" wine C:\\windows\\command\\start.exe /Unix /home/YOUR_USER_NAME/.wine/dosdevices/c:/ProgramData/Microsoft/Windows/Start\ Menu/Programs/Autodesk/Autodesk\ Fusion\ 360.lnk (Here we opening the program Fusion 360 and this creating some files in our .Fusion360 folder.)
+# this default settings file configures opengl mode in fusion, we must do before it can launch
+mkdir -p "$WINEPREFIX/drive_c/users/$USER/Application Data/Autodesk/Neutron Platform/Options"
+cat > "$WINEPREFIX/drive_c/users/$USER/Application Data/Autodesk/Neutron Platform/Options/NMachineSpecificOptions.xml" << "E"
+<?xml version="1.0" encoding="UTF-16" standalone="no" ?>
+<OptionGroups>
+  <BootstrapOptionsGroup SchemaVersion="2" ToolTip="Special preferences that require the application to be restarted after a change." UserName="Bootstrap">
+    <driverOptionId ToolTip="The driver used to display the graphics" UserName="Graphics driver" Value="VirtualDeviceGLCore"/></BootstrapOptionsGroup>
+</OptionGroups>
+E
 
-    13.) Login with your account data
+# Start fusion 360
+wine C:\\windows\\command\\start.exe /Unix $WINEPREFIX/dosdevices/c:/ProgramData/Microsoft/Windows/Start\ Menu/Programs/Autodesk/Autodesk\ Fusion\ 360.lnk
+```
 
-    14.) Now everything should work so far. Except floating Toolbars stays on top.
+3.) Login with your account data
 
-    For that:
-    ctrl+alt+b x2 (toggle browser toolbars off/on)
-    ctrl+alt+m x2 (toggle navigation toolbar off/on)
+4.) Now everything should work so far. Except floating Toolbars stays on top. For that:
+
+```sh
+ctrl+alt+b x2 (toggle browser toolbars off/on)
+ctrl+alt+m x2 (toggle navigation toolbar off/on)
+ctrl+alt+a x2 (toggle comments bar off/on)
+```
+
+* Then Click on the Browser with the mouse.
+* Now the toolbar works properly
+* This last steps 4.) has to be done for every new session / every new launch of Fusion 360
 
 * Here can you see more about Fusion 360 on Ubuntu: https://youtu.be/NJTV_enR6io & https://www.youtube.com/watch?v=R-ev3dhNM98
 
