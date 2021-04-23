@@ -106,7 +106,7 @@ ________________________________________________________________________________
     
     3.) Run this command: sudo apt-get install p7zip p7zip-full p7zip-rar && sudo apt-get install curl && sudo apt-get install winbind
     
-    4.) Run this command: winetricks corefonts vcrun2017 msxml4 (minimum requirement for running Fusion 360)
+    4.) Run this command: winetricks -q corefonts vcrun2017 msxml4 (minimum requirement for running Fusion 360)
 
     5.) Run this command: winetricks win10 (only when you use the wine version 6.6 -> At the moment)
         Run this command: winetricks win8  (for older wine versions)
