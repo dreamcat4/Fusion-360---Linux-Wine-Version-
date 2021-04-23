@@ -106,7 +106,7 @@ ________________________________________________________________________________
     
     3.) Run this command: sudo apt-get install p7zip p7zip-full p7zip-rar && sudo apt-get install curl && sudo apt-get install winbind
     
-    4.) Run this command: winetricks corefonts vcrun2017 msxml4 dxvk (minimum requirement for running Fusion 360)
+    4.) Run this command: winetricks corefonts vcrun2017 msxml4 (minimum requirement for running Fusion 360)
 
     5.) Run this command: winecfg 
     6.) Set the windows version to Windows 8 or 10 (only when you use the wine version 6.6 -> At the moment)
@@ -123,28 +123,26 @@ ________________________________________________________________________________
 
     12.) Run this command: wine setup/streamer.exe -p deploy -g -f log.txt --quiet (Run this command 2x)
 
-    13.) Run this command: cd $HOME && mkdir .Fusion360 && cd .Fusion360
+    13.) Run this command (configures opengl in fusion, we must do before it can launch):
+
+    mkdir -p "$WINEPREFIX/drive_c/users/$USER/Application Data/Autodesk/Neutron Platform/Options"
+    cat > "$WINEPREFIX/drive_c/users/$USER/Application Data/Autodesk/Neutron Platform/Options/NMachineSpecificOptions.xml" << "E"
+    <?xml version="1.0" encoding="UTF-16" standalone="no" ?>
+    <OptionGroups>
+      <BootstrapOptionsGroup SchemaVersion="2" ToolTip="Special preferences that require the application to be restarted after a change." UserName="Bootstrap">
+        <driverOptionId ToolTip="The driver used to display the graphics" UserName="Graphics driver" Value="VirtualDeviceGLCore"/></BootstrapOptionsGroup>
+    </OptionGroups>
+    E
 
     14.) Run this command: env WINEPREFIX="/home/YOUR_USER_NAME/.wine" wine C:\\windows\\command\\start.exe /Unix /home/YOUR_USER_NAME/.wine/dosdevices/c:/ProgramData/Microsoft/Windows/Start\ Menu/Programs/Autodesk/Autodesk\ Fusion\ 360.lnk (Here we opening the program Fusion 360 and this creating some files in our .Fusion360 folder.)
 
     15.) Login with your account data
 
-    16.) Then go to preferences and in General under Graphics driver, select DirectX 9. <-- OR -->
-    17.) Then go to preferences and in General under Graphics driver, select OpenGL <-- This is now the best choise for Fusion 360!
+    16.) Now everything should work so far. Except floating Toolbars stays on top.
 
-    18) Close Fusion 360
-
-    19.) Run this command: winecfg -> Go to libraries -> Change these options:
-
-    d3d10core = disabled
-    d3d11 = builtin
-    d3d9 = builtin
-    dxgi = builtin
-
-    
-    20.) Open Fusion again with this command: env WINEPREFIX="/home/YOUR_USER_NAME/.wine" wine C:\\windows\\command\\start.exe /Unix /home/YOUR_USER_NAME/.wine/dosdevices/c:/ProgramData/Microsoft/Windows/Start\ Menu/Programs/Autodesk/Autodesk\ Fusion\ 360.lnk (It's important, that your changing to your .Fusion360 folder in our home-directory and run then this command now & in the future here.)
-
-    21.) Now everything should work so far.
+    For that:
+    ctrl+alt+b x2 (toggle browser toolbars off/on)
+    ctrl+alt+m x2 (toggle navigation toolbar off/on)
 
 * Here can you see more about Fusion 360 on Ubuntu: https://youtu.be/NJTV_enR6io & https://www.youtube.com/watch?v=R-ev3dhNM98
 
